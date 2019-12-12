@@ -110,11 +110,11 @@
   services.xserver.desktopManager.plasma5.enable = true;
 
   users = {
-    groups = { nix = { }; };
+    groups = { nixadm = { }; };
 
     users.jakob = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "nix" ];
+      extraGroups = [ "wheel" "nixadm" ];
     };
   };
 
