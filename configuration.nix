@@ -28,8 +28,7 @@
         menuentry "Ubuntu" {
           insmod lvm
           search.fs_uuid 0c0c3417-ef95-4d1f-915b-2d0beba6b10d root lvmid/VlXJvq-4u1L-42Wt-yAeq-EqpQ-cpcm-ZtToDK/apAM50-qZB0-SIYC-lRQR-1AQd-dwCS-Kh4tfm 
-          set prefix=($root)'/boot/grub'
-          configfile $prefix/grub.cfg
+          configfile ($root)/boot/grub/grub.cfg
         }
       '';
       memtest86.enable = false;
