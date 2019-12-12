@@ -72,6 +72,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     wget vim tmux firefox git
+    pavucontrol
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -91,7 +92,7 @@
   networking.firewall.enable = true;
 
   # Enable CUPS to print documents.
-  # services.printing.enable = true;
+  services.printing.enable = true;
 
   # Enable sound.
   sound.enable = true;
