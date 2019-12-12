@@ -31,7 +31,6 @@
           configfile ($root)/boot/grub/grub.cfg
         }
       '';
-      memtest86.enable = false;
     };
   };
 
