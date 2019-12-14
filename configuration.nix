@@ -44,6 +44,13 @@
     device = "/dev/vgubuntu/root";
   };
 
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 4096;            # 4 GiB
+    }
+  ];
+
   networking.hostName = "jakob-acer-nixos"; # Define your hostname.
   networking.networkmanager.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -121,6 +128,10 @@
       extraGroups = [ "wheel" "nixadm" ];
     };
   };
+
+  # Tor
+  services.tor.enable = true;
+  services.tor.client.enable = true;
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
