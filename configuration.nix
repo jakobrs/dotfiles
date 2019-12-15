@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./identifying.nix
     ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -65,15 +66,14 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
+  time.timeZone = "Europe/Oslo";
+
   # Select internationalisation properties.
   i18n = {
     consoleFont = "Lat2-Terminus16";
     consoleKeyMap = "uk";
     defaultLocale = "en_GB.UTF-8";
   };
-
-  # Set your time zone.
-  time.timeZone = "Europe/Oslo";
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -84,6 +84,10 @@
 
   programs.tmux.enable = true;
   programs.tmux.keyMode = "vi";
+
+  programs.vim.defaultEditor = true;
+
+  programs.zsh.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -126,6 +130,7 @@
     users.jakob = {
       isNormalUser = true;
       extraGroups = [ "wheel" "nixadm" ];
+      shell = pkgs.zsh;
     };
   };
 
