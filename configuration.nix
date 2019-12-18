@@ -11,6 +11,8 @@
       ./identifying.nix
     ];
 
+  boot.cleanTmpDir = true;
+
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   ## Use the systemd-boot EFI boot loader.
@@ -80,6 +82,7 @@
   environment.systemPackages = with pkgs; [
     wget vim tmux firefox git
     pavucontrol
+    wireshark
   ];
 
   programs.tmux.enable = true;
