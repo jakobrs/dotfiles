@@ -15,8 +15,6 @@
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  ## Use the systemd-boot EFI boot loader.
-  #boot.loader.systemd-boot.enable = true;
   boot.loader = {
     systemd-boot.enable = false;
     efi = {
@@ -28,10 +26,12 @@
       efiInstallAsRemovable = true;
       efiSupport = true;
       version = 2;
-      devices = [ "nodev" ];
+      device = "nodev";
+      extraConfig = ''
+        insmod lvm
+      '';
       extraEntries = ''
         menuentry "Ubuntu" {
-          insmod lvm
           search.fs_uuid 0c0c3417-ef95-4d1f-915b-2d0beba6b10d root lvmid/VlXJvq-4u1L-42Wt-yAeq-EqpQ-cpcm-ZtToDK/apAM50-qZB0-SIYC-lRQR-1AQd-dwCS-Kh4tfm 
           configfile ($root)/boot/grub/grub.cfg
         }
@@ -83,6 +83,8 @@
     wget vim tmux firefox git
     pavucontrol
     wireshark
+    reptyr
+    libimobiledevice
   ];
 
   programs.tmux.enable = true;
@@ -106,7 +108,7 @@
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  networking.firewall.enable = true;
+  networking.firewall.enable = false;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -135,6 +137,10 @@
       extraGroups = [ "wheel" "nixadm" ];
       shell = pkgs.zsh;
     };
+  };
+
+  nix = {
+    trustedUsers = [ "root" "@wheel" ];
   };
 
   # Tor
