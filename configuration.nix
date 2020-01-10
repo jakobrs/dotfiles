@@ -30,12 +30,25 @@
       extraConfig = ''
         insmod lvm
       '';
+      useOSProber = false;
+      # result of os-prober
+      extraEntries = ''
+        ${builtins.readFile ./os-prober-result}
+
+        menuentry "UEFI Setup" {
+          fwsetup
+        }
+      '';
+      extraEntriesBeforeNixOS = true;
+      default = "3";
+      /*
       extraEntries = ''
         menuentry "Ubuntu" {
           search.fs_uuid 0c0c3417-ef95-4d1f-915b-2d0beba6b10d root lvmid/VlXJvq-4u1L-42Wt-yAeq-EqpQ-cpcm-ZtToDK/apAM50-qZB0-SIYC-lRQR-1AQd-dwCS-Kh4tfm 
           configfile ($root)/boot/grub/grub.cfg
         }
       '';
+      */
     };
   };
 
@@ -85,6 +98,7 @@
     wireshark
     reptyr
     libimobiledevice
+    kate
   ];
 
   programs.tmux.enable = true;
@@ -102,7 +116,7 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  services.openssh.enable = false;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -115,7 +129,16 @@
 
   # Enable sound.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio = {
+    enable = true;
+
+    extraModules = [ pkgs.pulseaudio-modules-bt ];
+
+    package = pkgs.pulseaudioFull;
+  };
+
+  # Enable bluetooth.
+  hardware.bluetooth.enable = true;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -152,4 +175,6 @@
   # servers. You should change this only after NixOS release notes say you
   # should.
   system.stateVersion = "19.09"; # Did you read the comment?
+
+  nix.useSandbox = true;
 }
