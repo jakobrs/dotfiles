@@ -9,6 +9,8 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./identifying.nix
+
+      ./cachix.nix
     ];
 
   boot.cleanTmpDir = true;
@@ -101,6 +103,8 @@
     kate
   ];
 
+  virtualisation.virtualbox.host.enable = true;
+
   programs.tmux.enable = true;
   programs.tmux.keyMode = "vi";
 
@@ -116,13 +120,22 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = false;
+  services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 4713 ];
+  networking.firewall.allowedUDPPorts = [ ];
   # Or disable the firewall altogether.
-  networking.firewall.enable = false;
+  #networking.firewall.enable = false;
+
+  /*
+  networking.nat = {
+    enable = true;
+    externalInterface = "wlan0";
+    internalInterfaces = [ "vboxnet0" ];
+    internalIPs = [ "192.168.56.0/24" ];
+  };
+  */
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -135,10 +148,21 @@
     extraModules = [ pkgs.pulseaudio-modules-bt ];
 
     package = pkgs.pulseaudioFull;
+
+    support32Bit = true;
+    
+    tcp = {
+      enable = true;
+      anonymousClients.allowAll = true;
+    };
   };
 
   # Enable bluetooth.
   hardware.bluetooth.enable = true;
+
+  hardware.opengl = {
+    driSupport32Bit = true;
+  };
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
