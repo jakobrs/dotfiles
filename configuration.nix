@@ -33,10 +33,7 @@
         insmod lvm
       '';
       useOSProber = false;
-      # result of os-prober
       extraEntries = ''
-        ${builtins.readFile ./os-prober-result}
-
         menuentry "UEFI Setup" {
           fwsetup
         }
@@ -54,18 +51,9 @@
     };
   };
 
-  fileSystems."/boot" = {
-    device = "/dev/sda1";
-  };
-  
-  fileSystems."/ubuntu/root" = {
-    device = "/dev/vgubuntu/root";
-  };
-
   swapDevices = [
     {
-      device = "/swapfile";
-      size = 4096;            # 4 GiB
+      device = "/dev/vgmain/swap";
     }
   ];
 
@@ -119,11 +107,23 @@
 
   # List services that you want to enable:
 
+  services.httpd = {
+    enable = true;
+    adminAddr = "jakobrs100@gmail.com";
+    virtualHosts = [
+      {
+        adminAddr = "jakobrs100@gmail.com";
+        enableUserDir = true;
+        documentRoot = "/srv/www";
+      }
+    ];
+  };
+
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 4713 ];
+  networking.firewall.allowedTCPPorts = [ 80 4713 ];
   networking.firewall.allowedUDPPorts = [ ];
   # Or disable the firewall altogether.
   #networking.firewall.enable = false;
