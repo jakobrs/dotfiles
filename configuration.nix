@@ -39,7 +39,7 @@
         }
       '';
       extraEntriesBeforeNixOS = true;
-      default = "3";
+      default = "1";
       /*
       extraEntries = ''
         menuentry "Ubuntu" {
@@ -123,10 +123,10 @@
   services.openssh.enable = true;
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 80 4713 ];
-  networking.firewall.allowedUDPPorts = [ ];
+  #networking.firewall.allowedTCPPorts = [ 80 4713 ];
+  #networking.firewall.allowedUDPPorts = [ ];
   # Or disable the firewall altogether.
-  #networking.firewall.enable = false;
+  networking.firewall.enable = false;
 
   /*
   networking.nat = {
@@ -169,6 +169,14 @@
   services.xserver.layout = "gb,no";
   services.xserver.xkbOptions = "eurosign:e,caps:escape";
 
+  /*
+  services.xserver.enableTCP = true;
+  services.xserver.displayManager.sddm.extraConfig = ''
+    [X11]
+    ServerArguments=-listen tcp
+  '';
+  */
+
   # Enable touchpad support.
   services.xserver.libinput.enable = true;
 
@@ -177,12 +185,12 @@
   services.xserver.desktopManager.plasma5.enable = true;
 
   users = {
+    defaultUserShell = pkgs.zsh;
     groups = { nixadm = { }; };
 
     users.jakob = {
       isNormalUser = true;
       extraGroups = [ "wheel" "nixadm" ];
-      shell = pkgs.zsh;
     };
   };
 
