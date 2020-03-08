@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports =
@@ -16,6 +16,11 @@
   boot.cleanTmpDir = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernel = {
+    sysctl = {
+      "kernel.sysrq" = 1;
+    };
+  };
 
   boot.loader = {
     systemd-boot.enable = false;
@@ -58,7 +63,7 @@
   ];
 
   networking.hostName = "jakob-acer-nixos"; # Define your hostname.
-  networking.networkmanager.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.networkmanager.enable = true;
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -83,12 +88,13 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget vim tmux firefox git
+    wget vimHugeX tmux firefox git
     pavucontrol
     wireshark
     reptyr
     libimobiledevice
     kate
+    direnv
   ];
 
   virtualisation.virtualbox.host.enable = true;
@@ -110,6 +116,14 @@
   services.httpd = {
     enable = true;
     adminAddr = "jakobrs100@gmail.com";
+
+    enableUserDir = true;
+    documentRoot = "/srv/www";
+
+    enableSSL = true;
+    sslServerCert = "/etc/letsencrypt/live/domain-name.xyz/fullchain.pem";
+    sslServerKey = "/etc/letsencrypt/live/domain-name.xyz/privkey.pem";
+
     virtualHosts = [
       {
         adminAddr = "jakobrs100@gmail.com";
@@ -121,9 +135,10 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+  services.openssh.forwardX11 = true;
 
   # Open ports in the firewall.
-  #networking.firewall.allowedTCPPorts = [ 80 4713 ];
+  #networking.firewall.allowedTCPPorts = [ 80 ];
   #networking.firewall.allowedUDPPorts = [ ];
   # Or disable the firewall altogether.
   networking.firewall.enable = false;
@@ -132,8 +147,7 @@
   networking.nat = {
     enable = true;
     externalInterface = "wlan0";
-    internalInterfaces = [ "vboxnet0" ];
-    internalIPs = [ "192.168.56.0/24" ];
+    internalInterfaces = [ "ve-+" ];
   };
   */
 
@@ -151,10 +165,12 @@
 
     support32Bit = true;
     
+    /*
     tcp = {
       enable = true;
       anonymousClients.allowAll = true;
     };
+    */
   };
 
   # Enable bluetooth.
@@ -168,6 +184,8 @@
   services.xserver.enable = true;
   services.xserver.layout = "gb,no";
   services.xserver.xkbOptions = "eurosign:e,caps:escape";
+
+  #services.logind.lidSwitch = "ignore"; # Appears to do nothing for whatever reason.
 
   /*
   services.xserver.enableTCP = true;
@@ -184,13 +202,15 @@
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
 
+  services.lorri.enable = true;
+
   users = {
     defaultUserShell = pkgs.zsh;
     groups = { nixadm = { }; };
 
     users.jakob = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "nixadm" ];
+      extraGroups = [ "wheel" "nixadm" "dialout" ];
     };
   };
 
