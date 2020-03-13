@@ -97,7 +97,7 @@
     direnv
   ];
 
-  virtualisation.virtualbox.host.enable = true;
+  #virtualisation.virtualbox.host.enable = true;
 
   programs.tmux.enable = true;
   programs.tmux.keyMode = "vi";
@@ -138,18 +138,34 @@
   services.openssh.forwardX11 = true;
 
   # Open ports in the firewall.
-  #networking.firewall.allowedTCPPorts = [ 80 ];
-  #networking.firewall.allowedUDPPorts = [ ];
+  networking.firewall.allowedTCPPorts = [ 22 80 443 8118 9050 8008 8448 8888 ];
+  networking.firewall.allowedUDPPorts = [ ];
   # Or disable the firewall altogether.
-  networking.firewall.enable = false;
+  #networking.firewall.enable = false;
 
   /*
+  Starting Nmap 7.80 ( https://nmap.org ) at 2020-03-12 07:41 CET
+  mass_dns: warning: Unable to determine any DNS servers. Reverse DNS is disabled. Try using --system-dns or specify valid servers with --dns-servers
+  Nmap scan report for localhost (127.0.0.1)
+  Host is up (0.000016s latency).
+  Other addresses for localhost (not scanned): ::1
+  Not shown: 65528 closed ports
+  PORT     STATE SERVICE
+  22/tcp   open  ssh
+  80/tcp   open  http
+  443/tcp  open  https
+  631/tcp  open  ipp
+  8118/tcp open  privoxy
+  9050/tcp open  tor-socks
+  9063/tcp open  unknown
+  
+  Nmap done: 1 IP address (1 host up) scanned in 1.84 seconds
+  */
   networking.nat = {
     enable = true;
     externalInterface = "wlan0";
     internalInterfaces = [ "ve-+" ];
   };
-  */
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
