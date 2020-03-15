@@ -22,6 +22,8 @@
     };
   };
 
+  #boot.blacklistedKernelModules = [ "evdev" ];
+
   boot.loader = {
     systemd-boot.enable = false;
     efi = {
