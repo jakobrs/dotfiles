@@ -119,20 +119,17 @@
     enable = true;
     adminAddr = "jakobrs100@gmail.com";
 
-    enableUserDir = true;
-    documentRoot = "/srv/www";
-
-    enableSSL = true;
-    sslServerCert = "/etc/letsencrypt/live/domain-name.xyz/fullchain.pem";
-    sslServerKey = "/etc/letsencrypt/live/domain-name.xyz/privkey.pem";
-
-    virtualHosts = [
-      {
+    virtualHosts = {
+      vh1 = {
         adminAddr = "jakobrs100@gmail.com";
         enableUserDir = true;
         documentRoot = "/srv/www";
-      }
-    ];
+
+        addSSL = true;
+        sslServerCert = "/etc/letsencrypt/live/domain-name.xyz/fullchain.pem";
+        sslServerKey = "/etc/letsencrypt/live/domain-name.xyz/privkey.pem";
+      };
+    };
   };
 
   # Enable the OpenSSH daemon.
