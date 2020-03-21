@@ -70,8 +70,6 @@
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.interfaces.enp3s0f0.useDHCP = true;
-  networking.interfaces.wlp4s0.useDHCP = true;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -96,6 +94,8 @@
     libimobiledevice
     kate
     direnv
+
+    sshfs
   ];
 
   #virtualisation.virtualbox.host.enable = true;
@@ -133,6 +133,10 @@
       }
     ];
   };
+
+  # General Purpose Mouse
+  # enables mouse in the virtual terminal
+  services.gpm.enable = true;
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
