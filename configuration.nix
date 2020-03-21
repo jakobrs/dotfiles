@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./identifying.nix
+      ./local.nix  # A symlink to one of the *-specific.nix files
 
       ./cachix.nix
     ];
@@ -63,7 +64,6 @@
     }
   ];
 
-  networking.hostName = "jakob-acer-nixos"; # Define your hostname.
   networking.networkmanager.enable = true;
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
