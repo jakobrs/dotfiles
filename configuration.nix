@@ -94,6 +94,7 @@
     libimobiledevice
     kate
     direnv
+    gnupg
 
     sshfs
   ];
