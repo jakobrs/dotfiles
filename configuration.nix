@@ -26,20 +26,13 @@
   #boot.blacklistedKernelModules = [ "evdev" ];
 
   boot.loader = {
-    systemd-boot.enable = false;
     efi = {
       canTouchEfiVariables = true;
-      efiSysMountPoint = "/boot";
     };
     grub = {
       enable = true;
       efiSupport = true;
-      version = 2;
       device = "nodev";
-      extraConfig = ''
-        insmod lvm
-      '';
-      useOSProber = false;
       extraEntries = ''
         menuentry "UEFI Setup" {
           fwsetup
@@ -47,14 +40,6 @@
       '';
       extraEntriesBeforeNixOS = true;
       default = "1";
-      /*
-      extraEntries = ''
-        menuentry "Ubuntu" {
-          search.fs_uuid 0c0c3417-ef95-4d1f-915b-2d0beba6b10d root lvmid/VlXJvq-4u1L-42Wt-yAeq-EqpQ-cpcm-ZtToDK/apAM50-qZB0-SIYC-lRQR-1AQd-dwCS-Kh4tfm 
-          configfile ($root)/boot/grub/grub.cfg
-        }
-      '';
-      */
     };
   };
 
