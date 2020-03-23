@@ -119,16 +119,26 @@
     enable = true;
     adminAddr = "jakobrs100@gmail.com";
 
-    enableUserDir = true;
-    documentRoot = "/srv/www";
-
-    enableSSL = true;
-    sslServerCert = "/etc/letsencrypt/live/domain-name.xyz/fullchain.pem";
-    sslServerKey = "/etc/letsencrypt/live/domain-name.xyz/privkey.pem";
-
     virtualHosts = [
       {
+        hostName = "domain-name.xyz";
+        serverAliases = [ "srv.domain-name.xyz" "www.domain-name.xyz" ];
+
         adminAddr = "jakobrs100@gmail.com";
+
+        enableUserDir = true;
+        documentRoot = "/srv/www";
+
+        enableSSL = true;
+        sslServerCert = "/etc/letsencrypt/live/domain-name.xyz/fullchain.pem";
+        sslServerKey = "/etc/letsencrypt/live/domain-name.xyz/privkey.pem";
+      }
+      {
+        hostName = "domain-name.xyz";
+        serverAliases = [ "srv.domain-name.xyz" "www.domain-name.xyz" ];
+
+        adminAddr = "jakobrs100@gmail.com";
+
         enableUserDir = true;
         documentRoot = "/srv/www";
       }
