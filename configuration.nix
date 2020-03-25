@@ -4,7 +4,10 @@
 
 { config, lib, pkgs, ... }:
 
-{
+let
+  nixos-unstable = import <nixos-unstable> { };
+
+in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -26,11 +29,12 @@
   #boot.blacklistedKernelModules = [ "evdev" ];
 
   boot.loader = {
+    systemd-boot.enable = true;
     efi = {
       canTouchEfiVariables = true;
     };
     grub = {
-      enable = true;
+      enable = false;
       efiSupport = true;
       device = "nodev";
       extraEntries = ''
@@ -187,7 +191,10 @@
   };
 
   # Enable bluetooth.
-  hardware.bluetooth.enable = true;
+  hardware.bluetooth = {
+    enable = true;
+    package = nixos-unstable.bluez;
+  };
 
   hardware.opengl = {
     driSupport32Bit = true;
