@@ -4,10 +4,7 @@
 
 { config, lib, pkgs, ... }:
 
-let
-  nixos-unstable = import <nixos-unstable> { };
-
-in {
+{
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -193,7 +190,6 @@ in {
   # Enable bluetooth.
   hardware.bluetooth = {
     enable = true;
-    package = nixos-unstable.bluez;
   };
 
   hardware.opengl = {
