@@ -244,5 +244,11 @@
   # should.
   system.stateVersion = "19.09"; # Did you read the comment?
 
+  nixpkgs.overlays = [
+    (self: super: {
+      bluez = self.callPackage <nixos-unstable/pkgs/os-specific/linux/bluez> {};
+    })
+  ];
+
   nix.useSandbox = true;
 }
