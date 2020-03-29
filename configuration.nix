@@ -83,6 +83,9 @@
     gnupg
 
     sshfs
+
+    archivemount dex diffoscope ffmpeg-full file
+    jq nmap patchelf xxd
   ];
 
   #virtualisation.virtualbox.host.enable = true;
