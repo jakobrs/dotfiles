@@ -50,7 +50,10 @@
     }
   ];
 
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    #unmanaged = [ "enp3s0" ];
+    enable = true;
+  };
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -85,7 +88,7 @@
     sshfs
 
     archivemount dex diffoscope ffmpeg-full file
-    jq nmap patchelf xxd
+    jq nmap patchelf xxd usbutils
   ];
 
   #virtualisation.virtualbox.host.enable = true;
@@ -165,11 +168,17 @@
   networking.nat = {
     enable = true;
     externalInterface = "wlan0";
+    #internalInterfaces = [ "enp3s0" ];
     internalInterfaces = [ "ve-+" ];
   };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+  };
 
   # Enable sound.
   sound.enable = true;
@@ -252,6 +261,12 @@
       bluez = self.callPackage <nixos-unstable/pkgs/os-specific/linux/bluez> {};
     })
   ];
+
+  nixpkgs.config.packageOverrides = pkgs: {
+    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+      inherit pkgs;
+    };
+  };
 
   nix.useSandbox = true;
 }
