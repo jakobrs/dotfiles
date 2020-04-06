@@ -4,7 +4,14 @@
 
 { config, lib, pkgs, ... }:
 
-{
+let
+  #nixos-really-unstable = import (builtins.fetchTarball {
+  #  url = https://github.com/NixOS/nixpkgs/archive/c06bcddaad5ca569e1b3551cda341e138c4700b3.tar.gz;
+  #  sha256 = "0pzvpapflk0aj75r386spkvq62dpprgl9h1fpwx61m2jl8846yig";
+  #}) {};
+  nixos-unstable-small = import <nixos-unstable-small> {};
+
+in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -16,7 +23,7 @@
 
   boot.cleanTmpDir = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = nixos-unstable-small.linuxPackages_latest;
   boot.kernel = {
     sysctl = {
       "kernel.sysrq" = 1;
@@ -68,7 +75,8 @@
 
   # Select internationalisation properties.
   i18n = {
-    consoleFont = "Lat2-Terminus16";
+    consoleFont = "ter-118n"; # Terminus 16
+    consolePackages = with pkgs.kbdKeymaps; [ dvp neo pkgs.terminus_font ];
     consoleKeyMap = "uk";
     defaultLocale = "en_GB.UTF-8";
   };
@@ -89,6 +97,8 @@
 
     archivemount dex diffoscope ffmpeg-full file
     jq nmap patchelf xxd usbutils
+
+    wireguard
   ];
 
   #virtualisation.virtualbox.host.enable = true;
