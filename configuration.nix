@@ -62,10 +62,14 @@ in {
     enable = true;
   };
 
+  networking.hostName = "jakob-lenovo-nixos";
+
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
+  networking.interfaces.enp3s0.useDHCP = true;
+  networking.interfaces.wlp2s0.useDHCP = true;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -152,7 +156,7 @@ in {
   services.openssh.forwardX11 = true;
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 80 443 8118 9050 8008 8448 8888 ];
+  networking.firewall.allowedTCPPorts = [ 22 80 443 8118 9050 8008 8448 8888 51111 ];
   networking.firewall.allowedUDPPorts = [ ];
   # Or disable the firewall altogether.
   #networking.firewall.enable = false;
