@@ -16,7 +16,6 @@ in {
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./identifying.nix
-      ./local.nix  # A symlink to one of the *-specific.nix files
 
       ./cachix.nix
     ];
@@ -156,7 +155,7 @@ in {
   services.openssh.forwardX11 = true;
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 80 443 8118 9050 8008 8448 8888 51111 ];
+  networking.firewall.allowedTCPPorts = [ 22 80 443 8008 8118 8080 8448 8888 9050 51111 ];
   networking.firewall.allowedUDPPorts = [ ];
   # Or disable the firewall altogether.
   #networking.firewall.enable = false;
