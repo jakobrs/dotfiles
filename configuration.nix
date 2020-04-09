@@ -60,6 +60,7 @@ in {
     #unmanaged = [ "enp3s0" ];
     enable = true;
   };
+  networking.dhcpcd.enable = false;
 
   networking.hostName = "jakob-lenovo-nixos";
 
