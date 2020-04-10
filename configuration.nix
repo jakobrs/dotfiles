@@ -135,6 +135,12 @@ in {
 
           enableUserDir = true;
           documentRoot = "/srv/www";
+
+          extraConfig = ''
+            <Directory "/home/*/public_html">
+              AllowOverride Options
+            </Directory>
+          '';
         };
 
       in [
