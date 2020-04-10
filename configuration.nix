@@ -127,7 +127,18 @@ in {
 
     virtualHosts =
       let
-        mainHost = {
+        addSSL = host: [
+          host
+          (host // {
+            enableSSL = true;
+            sslServerCert = "/etc/letsencrypt/live/domain-name.xyz/fullchain.pem";
+            sslServerKey = "/etc/letsencrypt/live/domain-name.xyz/privkey.pem";
+          })
+        ];
+        addSSLs = lib.concatMap addSSL;
+
+      in addSSLs [
+        {
           hostName = "domain-name.xyz";
           serverAliases = [ "srv.domain-name.xyz" "www.domain-name.xyz" ];
 
@@ -141,15 +152,17 @@ in {
               AllowOverride Options
             </Directory>
           '';
-        };
+        }
+        {
+          hostName = "mcstatus.domain-name.xyz";
 
-      in [
-        mainHost
-        (mainHost // {
-          enableSSL = true;
-          sslServerCert = "/etc/letsencrypt/live/domain-name.xyz/fullchain.pem";
-          sslServerKey = "/etc/letsencrypt/live/domain-name.xyz/privkey.pem";
-        })
+          adminAddr = "jakobrs100@gmail.com";
+
+          extraConfig = ''
+            ProxyPass / http://localhost:8081/
+            ProxyPassReverse / http://localhost:8081/
+          '';
+        }
       ];
   };
 
