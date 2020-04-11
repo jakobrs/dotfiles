@@ -5,10 +5,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  #nixos-really-unstable = import (builtins.fetchTarball {
-  #  url = https://github.com/NixOS/nixpkgs/archive/c06bcddaad5ca569e1b3551cda341e138c4700b3.tar.gz;
-  #  sha256 = "0pzvpapflk0aj75r386spkvq62dpprgl9h1fpwx61m2jl8846yig";
-  #}) {};
+  nixos-unstable = import <nixos-unstable> {};
   nixos-unstable-small = import <nixos-unstable-small> {};
 
 in {
@@ -22,7 +19,7 @@ in {
 
   boot.cleanTmpDir = true;
 
-  boot.kernelPackages = nixos-unstable-small.linuxPackages_latest;
+  boot.kernelPackages = nixos-unstable.linuxPackages_latest;
   boot.kernel = {
     sysctl = {
       "kernel.sysrq" = 1;
