@@ -132,9 +132,8 @@ in {
             sslServerKey = "/etc/letsencrypt/live/domain-name.xyz/privkey.pem";
           })
         ];
-        addSSLs = lib.concatMap addSSL;
 
-      in addSSLs [
+      in lib.concatMap addSSL [
         {
           hostName = "domain-name.xyz";
           serverAliases = [ "srv.domain-name.xyz" "www.domain-name.xyz" ];
