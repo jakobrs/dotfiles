@@ -107,7 +107,8 @@ in {
   programs.tmux.enable = true;
   programs.tmux.keyMode = "vi";
 
-  programs.vim.defaultEditor = true;
+  #programs.vim.defaultEditor = true;
+  environment.variables = { EDITOR = "vim"; };
 
   programs.zsh.enable = true;
 
@@ -141,7 +142,7 @@ in {
           adminAddr = "jakobrs100@gmail.com";
 
           enableUserDir = true;
-          documentRoot = "/srv/www";
+          documentRoot = "/srv/www/main";
 
           extraConfig = ''
             <Directory "/home/*/public_html">
