@@ -19,6 +19,7 @@ in {
 
   boot.cleanTmpDir = true;
 
+  boot.extraModulePackages = with nixos-unstable.linuxPackages_latest; [ v4l2loopback ];
   boot.kernelPackages = nixos-unstable.linuxPackages_latest;
   boot.kernel = {
     sysctl = {
