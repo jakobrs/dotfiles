@@ -77,10 +77,13 @@ in {
 
   # Select internationalisation properties.
   i18n = {
-    consoleFont = "ter-118n"; # Terminus 16
-    consolePackages = with pkgs.kbdKeymaps; [ dvp neo pkgs.terminus_font ];
-    consoleKeyMap = "uk";
     defaultLocale = "en_GB.UTF-8";
+  };
+
+  console = {
+    font = "ter-118n"; # Terminus 16
+    packages = with pkgs.kbdKeymaps; [ dvp neo pkgs.terminus_font ];
+    keyMap = "uk";
   };
 
   # List packages installed in system profile. To search, run:
@@ -104,6 +107,8 @@ in {
   ];
 
   #virtualisation.virtualbox.host.enable = true;
+  #virtualisation.lxc.enable = true;
+  virtualisation.lxd.enable = true;
 
   programs.tmux.enable = true;
   programs.tmux.keyMode = "vi";
@@ -122,25 +127,21 @@ in {
 
   services.httpd = {
     enable = true;
-    adminAddr = "jakobrs100@gmail.com";
 
     virtualHosts =
       let
-        addSSL = host: [
-          host
-          (host // {
-            enableSSL = true;
+        addDefault = _: host:
+          host // {
+            addSSL = true;
             sslServerCert = "/etc/letsencrypt/live/domain-name.xyz/fullchain.pem";
             sslServerKey = "/etc/letsencrypt/live/domain-name.xyz/privkey.pem";
-          })
-        ];
 
-      in lib.concatMap addSSL [
-        {
-          hostName = "domain-name.xyz";
+            adminAddr = "jakobrs100@gmail.com";
+          };
+
+      in lib.mapAttrs addDefault {
+        "domain-name.xyz" = {
           serverAliases = [ "srv.domain-name.xyz" "www.domain-name.xyz" ];
-
-          adminAddr = "jakobrs100@gmail.com";
 
           enableUserDir = true;
           documentRoot = "/srv/www/main";
@@ -150,18 +151,14 @@ in {
               AllowOverride Options
             </Directory>
           '';
-        }
-        {
-          hostName = "mcstatus.domain-name.xyz";
-
-          adminAddr = "jakobrs100@gmail.com";
-
+        };
+        "mcstatus.domain-name.xyz" = {
           extraConfig = ''
             ProxyPass / http://localhost:8081/
             ProxyPassReverse / http://localhost:8081/
           '';
-        }
-      ];
+        };
+      };
   };
 
   # General Purpose Mouse
@@ -269,7 +266,7 @@ in {
 
     users.jakob = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "nixadm" "dialout" ];
+      extraGroups = [ "wheel" "nixadm" "dialout" "lxd" ];
     };
   };
 
@@ -289,15 +286,13 @@ in {
 
   nixpkgs.overlays = [
     (self: super: {
-      bluez = self.callPackage <nixos-unstable/pkgs/os-specific/linux/bluez> {};
+      #bluez = super.callPackage <nixos-unstable/pkgs/os-specific/linux/bluez> {};
+
+      nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+        inherit pkgs;
+      };
     })
   ];
-
-  nixpkgs.config.packageOverrides = pkgs: {
-    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-      inherit pkgs;
-    };
-  };
 
   nix.useSandbox = true;
 }
