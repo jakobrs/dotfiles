@@ -5,6 +5,7 @@
 { config, lib, pkgs, ... }:
 
 let
+  nixos-19-09 = import <nixos-19.09> {};
   nixos-unstable = import <nixos-unstable> {};
   nixos-unstable-small = import <nixos-unstable-small> {};
 
@@ -15,7 +16,11 @@ in {
       ./identifying.nix
 
       ./cachix.nix
+
+      ./libinput-altered.nix
     ];
+
+  disabledModules = [ "services/x11/hardware/libinput.nix" ];
 
   boot.cleanTmpDir = true;
 
@@ -218,7 +223,7 @@ in {
     package = pkgs.pulseaudioFull;
 
     support32Bit = true;
-    
+
     /*
     tcp = {
       enable = true;
@@ -252,7 +257,12 @@ in {
   */
 
   # Enable touchpad support.
-  services.xserver.libinput.enable = true;
+  services.xserver.libinput = {
+    enable = true;
+
+    package = nixos-19-09.libinput;
+    xf86inputlibinput.package = nixos-19-09.xorg.xf86inputlibinput;
+  };
 
   # Enable the KDE Desktop Environment.
   services.xserver.displayManager.sddm.enable = true;
