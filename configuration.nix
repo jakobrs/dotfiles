@@ -17,7 +17,7 @@ in {
 
       ./cachix.nix
 
-      ./libinput-altered.nix
+      ./libinput.nix
     ];
 
   disabledModules = [ "services/x11/hardware/libinput.nix" ];
@@ -260,8 +260,19 @@ in {
   services.xserver.libinput = {
     enable = true;
 
-    package = nixos-19-09.libinput;
-    xf86inputlibinput.package = nixos-19-09.xorg.xf86inputlibinput;
+    #package = nixos-19-09.libinput;
+    package = nixos-unstable.libinput;
+    #package = pkgs.callPackage ./libinput { graphviz = pkgs.graphviz-nox; };
+    #package = pkgs.libinput.overrideAttrs (old: {
+    #  patches = old.patches ++ [
+    #    (pkgs.fetchpatch {
+    #      name = "dont-override-udev.patch";
+    #      url = "https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/384.patch";
+    #      sha256 = "184z9awskbs19qmlngqzvp5hp43g6lkxrzzqqpppb16j1y4gs45r";
+    #    })
+    #  ];
+    #});
+    #xf86inputlibinput.package = nixos-19-09.xorg.xf86inputlibinput;
   };
 
   # Enable the KDE Desktop Environment.
