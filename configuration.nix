@@ -24,7 +24,7 @@ in {
 
   boot.cleanTmpDir = true;
 
-  boot.extraModulePackages = with nixos-unstable.linuxPackages_latest; [ v4l2loopback ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
   boot.kernelPackages = nixos-unstable.linuxPackages_latest;
   boot.kernel = {
     sysctl = {
@@ -53,12 +53,6 @@ in {
     };
   };
 
-  swapDevices = [
-    {
-      device = "/dev/vgmain/swap";
-    }
-  ];
-
   networking.networkmanager = {
     #unmanaged = [ "enp3s0" ];
     enable = true;
@@ -71,8 +65,8 @@ in {
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.interfaces.enp3s0.useDHCP = true;
-  networking.interfaces.wlp2s0.useDHCP = true;
+  #networking.interfaces.enp3s0.useDHCP = true;
+  #networking.interfaces.wlp2s0.useDHCP = true;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -200,7 +194,7 @@ in {
   */
   networking.nat = {
     enable = true;
-    externalInterface = "wlan0";
+    externalInterface = "wlp2s0";
     #internalInterfaces = [ "enp3s0" ];
     internalInterfaces = [ "ve-+" ];
   };
@@ -264,13 +258,13 @@ in {
     package = nixos-unstable.libinput;
     #package = pkgs.callPackage ./libinput { graphviz = pkgs.graphviz-nox; };
     #package = pkgs.libinput.overrideAttrs (old: {
-    #  patches = old.patches ++ [
+    #  patches = old.patches ++ [ ./384.patch ]; /*
     #    (pkgs.fetchpatch {
     #      name = "dont-override-udev.patch";
     #      url = "https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/384.patch";
     #      sha256 = "184z9awskbs19qmlngqzvp5hp43g6lkxrzzqqpppb16j1y4gs45r";
     #    })
-    #  ];
+    #  ]; */
     #});
     #xf86inputlibinput.package = nixos-19-09.xorg.xf86inputlibinput;
   };
@@ -307,8 +301,6 @@ in {
 
   nixpkgs.overlays = [
     (self: super: {
-      #bluez = super.callPackage <nixos-unstable/pkgs/os-specific/linux/bluez> {};
-
       nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
         inherit pkgs;
       };
