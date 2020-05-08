@@ -5,7 +5,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  nixos-19-09 = import <nixos-19.09> {};
   nixos-unstable = import <nixos-unstable> {};
   nixos-unstable-small = import <nixos-unstable-small> {};
 
@@ -290,8 +289,10 @@ in {
   };
 
   # Tor
-  services.tor.enable = true;
-  services.tor.client.enable = true;
+  services.tor = {
+    enable = true;
+    client.enable = true;
+  };
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
