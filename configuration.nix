@@ -106,7 +106,7 @@ in {
 
   #virtualisation.virtualbox.host.enable = true;
   #virtualisation.lxc.enable = true;
-  virtualisation.lxd.enable = true;
+  #virtualisation.lxd.enable = true;
 
   programs.tmux.enable = true;
   programs.tmux.keyMode = "vi";
