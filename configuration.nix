@@ -145,8 +145,11 @@ in {
           documentRoot = "/srv/www/main";
 
           extraConfig = ''
+            <Directory "/srv/www/main">
+              AllowOverride All
+            </Directory>
             <Directory "/home/*/public_html">
-              AllowOverride Options
+              AllowOverride All
             </Directory>
           '';
         };
@@ -257,7 +260,7 @@ in {
     package = nixos-unstable.libinput;
     #package = pkgs.callPackage ./libinput { graphviz = pkgs.graphviz-nox; };
     #package = pkgs.libinput.overrideAttrs (old: {
-    #  patches = old.patches ++ [ ./384.patch ]; /*
+    #  patches = old.patches ++ [ ./85707.patch ]; /*
     #    (pkgs.fetchpatch {
     #      name = "dont-override-udev.patch";
     #      url = "https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/384.patch";
@@ -292,6 +295,10 @@ in {
   services.tor = {
     enable = true;
     client.enable = true;
+
+    #hiddenServices."main".map = [ { port = 22; } { port = 80; } ];
+
+    controlSocket.enable = true;
   };
 
   # This value determines the NixOS release with which your system is to be
