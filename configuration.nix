@@ -53,19 +53,17 @@ in {
   };
 
   networking.networkmanager = {
-    #unmanaged = [ "enp3s0" ];
+    #unmanaged = [ "enp3s0f0" ];
     enable = true;
   };
   networking.dhcpcd.enable = false;
 
-  networking.hostName = "jakob-lenovo-nixos";
+  networking.hostName = "jakob-acer-nixos";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  #networking.interfaces.enp3s0.useDHCP = true;
-  #networking.interfaces.wlp2s0.useDHCP = true;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -196,8 +194,7 @@ in {
   */
   networking.nat = {
     enable = true;
-    externalInterface = "wlp2s0";
-    #internalInterfaces = [ "enp3s0" ];
+    externalInterface = "wlp4s0";
     internalInterfaces = [ "ve-+" ];
   };
 
