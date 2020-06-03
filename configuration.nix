@@ -100,11 +100,17 @@ in {
     jq nmap patchelf xxd usbutils
 
     wireguard
+
+    virt-manager spice-gtk
   ];
 
   #virtualisation.virtualbox.host.enable = true;
   #virtualisation.lxc.enable = true;
   #virtualisation.lxd.enable = true;
+
+  virtualisation.libvirtd.enable = true;
+
+  security.wrappers.spice-client-glib-usb-acl-helper.source = "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
 
   programs.tmux.enable = true;
   programs.tmux.keyMode = "vi";
@@ -270,6 +276,7 @@ in {
 
   # Enable the KDE Desktop Environment.
   services.xserver.displayManager.sddm.enable = true;
+  #services.xserver.displayManager.startx.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
 
   services.lorri.enable = true;
@@ -281,6 +288,8 @@ in {
     users.jakob = {
       isNormalUser = true;
       extraGroups = [ "wheel" "nixadm" "dialout" "lxd" ];
+
+      initialPassword = "password";
     };
   };
 
