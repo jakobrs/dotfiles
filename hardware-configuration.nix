@@ -8,37 +8,38 @@
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "ohci_pci" "ehci_pci" "sd_mod" "sdhci_pci" ];
-  boot.initrd.kernelModules = [ "dm-snapshot" ];
-  boot.kernelModules = [ "kvm-amd" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "sd_mod" ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/7c4f7f2f-72da-40e9-a693-b218098de6dd";
+    { device = "/dev/disk/by-uuid/ef6592d9-53db-4f85-9798-0914c928b443";
       fsType = "btrfs";
-      options = [ "subvol=@" ];
+      options = [ "subvol=@root" ];
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/7c4f7f2f-72da-40e9-a693-b218098de6dd";
+    { device = "/dev/disk/by-uuid/ef6592d9-53db-4f85-9798-0914c928b443";
       fsType = "btrfs";
       options = [ "subvol=@nix" ];
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/7c4f7f2f-72da-40e9-a693-b218098de6dd";
+    { device = "/dev/disk/by-uuid/ef6592d9-53db-4f85-9798-0914c928b443";
       fsType = "btrfs";
       options = [ "subvol=@home" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/9E06-9025";
+    { device = "/dev/disk/by-uuid/3657-6E57";
       fsType = "vfat";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/55c75a67-bbbf-4438-bdd0-0fc0117d86d4"; }
+    [ { device = "/dev/disk/by-uuid/92334d34-a9b7-4f12-ba57-0e994c89d7e7"; }
     ];
 
   nix.maxJobs = lib.mkDefault 4;
+  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 }

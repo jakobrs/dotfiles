@@ -58,7 +58,7 @@ in {
   };
   networking.dhcpcd.enable = false;
 
-  networking.hostName = "jakob-acer-nixos";
+  networking.hostName = "jakob-lenovo-nixos";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -200,7 +200,7 @@ in {
   */
   networking.nat = {
     enable = true;
-    externalInterface = "wlp4s0";
+    externalInterface = "wlp2s0";
     internalInterfaces = [ "ve-+" ];
   };
 
@@ -258,6 +258,8 @@ in {
   # Enable touchpad support.
   services.xserver.libinput = {
     enable = true;
+
+    clickMethod = "clickfinger";
 
     #package = nixos-19-09.libinput;
     package = nixos-unstable.libinput;
