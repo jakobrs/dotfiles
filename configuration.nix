@@ -102,6 +102,8 @@ in {
     wireguard
 
     virt-manager spice-gtk
+
+    gparted htop
   ];
 
   #virtualisation.virtualbox.host.enable = true;
@@ -314,6 +316,10 @@ in {
   # servers. You should change this only after NixOS release notes say you
   # should.
   system.stateVersion = "19.09"; # Did you read the comment?
+
+  nixpkgs.config = {
+    firefox.enablePlasmaBrowserIntegration = true;
+  };
 
   nixpkgs.overlays = [
     (self: super: {
