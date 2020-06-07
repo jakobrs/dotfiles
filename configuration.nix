@@ -94,6 +94,8 @@ in {
     direnv
     gnupg
 
+    acpi efibootmgr
+
     sshfs
 
     archivemount dex diffoscope ffmpeg-full file

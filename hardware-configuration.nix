@@ -8,7 +8,7 @@
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
@@ -16,7 +16,7 @@
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/ef6592d9-53db-4f85-9798-0914c928b443";
       fsType = "btrfs";
-      options = [ "subvol=@root" ];
+      options = [ "subvol=@nixos-root" ];
     };
 
   fileSystems."/nix" =
@@ -28,12 +28,17 @@
   fileSystems."/home" =
     { device = "/dev/disk/by-uuid/ef6592d9-53db-4f85-9798-0914c928b443";
       fsType = "btrfs";
-      options = [ "subvol=@home" ];
+      options = [ "subvol=@nixos-home" ];
     };
 
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/3657-6E57";
       fsType = "vfat";
+    };
+
+  fileSystems."/windows" =
+    { device = "/dev/disk/by-uuid/46C242B1C242A4D1";
+      fsType = "ntfs";
     };
 
   swapDevices =
