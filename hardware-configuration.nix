@@ -36,13 +36,8 @@
       fsType = "vfat";
     };
 
-  fileSystems."/windows" =
-    { device = "/dev/disk/by-uuid/46C242B1C242A4D1";
-      fsType = "ntfs";
-    };
-
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/92334d34-a9b7-4f12-ba57-0e994c89d7e7"; }
+    [ { device = "/dev/disk/by-uuid/bc3d5bad-e7ec-4bfc-ab6d-3772e16e6c30"; }
     ];
 
   nix.maxJobs = lib.mkDefault 4;

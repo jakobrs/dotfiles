@@ -58,7 +58,7 @@ in {
   };
   networking.dhcpcd.enable = false;
 
-  networking.hostName = "jakob-lenovo-nixos";
+  networking.hostName = "lenovo-nixos";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -131,48 +131,11 @@ in {
 
   # List services that you want to enable:
 
-  services.httpd = {
-    enable = true;
-
-    virtualHosts =
-      let
-        addDefault = _: host:
-          host // {
-            addSSL = true;
-            sslServerCert = "/etc/letsencrypt/live/domain-name.xyz/fullchain.pem";
-            sslServerKey = "/etc/letsencrypt/live/domain-name.xyz/privkey.pem";
-
-            adminAddr = "jakobrs100@gmail.com";
-          };
-
-      in lib.mapAttrs addDefault {
-        "domain-name.xyz" = {
-          serverAliases = [ "srv.domain-name.xyz" "www.domain-name.xyz" ];
-
-          enableUserDir = true;
-          documentRoot = "/srv/www/main";
-
-          extraConfig = ''
-            <Directory "/srv/www/main">
-              AllowOverride All
-            </Directory>
-            <Directory "/home/*/public_html">
-              AllowOverride All
-            </Directory>
-          '';
-        };
-        "mcstatus.domain-name.xyz" = {
-          extraConfig = ''
-            ProxyPass / http://localhost:8081/
-            ProxyPassReverse / http://localhost:8081/
-          '';
-        };
-      };
-  };
-
   # General Purpose Mouse
   # enables mouse in the virtual terminal
   services.gpm.enable = true;
+
+  services.flatpak.enable = true;
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
@@ -205,16 +168,11 @@ in {
   networking.nat = {
     enable = true;
     externalInterface = "wlp2s0";
-    internalInterfaces = [ "ve-+" ];
+    internalInterfaces = [ "veth0" ];
   };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
-  services.avahi = {
-    enable = true;
-    nssmdns = true;
-  };
 
   # Enable sound.
   sound.enable = true;
