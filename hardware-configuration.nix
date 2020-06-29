@@ -16,7 +16,7 @@
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/ef6592d9-53db-4f85-9798-0914c928b443";
       fsType = "btrfs";
-      options = [ "subvol=@nixos-root" ];
+      options = [ "subvol=nixos/@" ];
     };
 
   fileSystems."/nix" =
@@ -28,7 +28,7 @@
   fileSystems."/home" =
     { device = "/dev/disk/by-uuid/ef6592d9-53db-4f85-9798-0914c928b443";
       fsType = "btrfs";
-      options = [ "subvol=@nixos-home" ];
+      options = [ "subvol=nixos/@home" ];
     };
 
   fileSystems."/boot" =

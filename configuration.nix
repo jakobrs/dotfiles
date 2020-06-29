@@ -15,11 +15,7 @@ in {
       ./identifying.nix
 
       ./cachix.nix
-
-      ./libinput.nix
     ];
-
-  disabledModules = [ "services/x11/hardware/libinput.nix" ];
 
   boot.cleanTmpDir = true;
 
@@ -38,24 +34,9 @@ in {
     efi = {
       canTouchEfiVariables = true;
     };
-    grub = {
-      enable = false;
-      efiSupport = true;
-      device = "nodev";
-      extraEntries = ''
-        menuentry "UEFI Setup" {
-          fwsetup
-        }
-      '';
-      extraEntriesBeforeNixOS = true;
-      default = "1";
-    };
   };
 
-  networking.networkmanager = {
-    #unmanaged = [ "enp3s0f0" ];
-    enable = true;
-  };
+  networking.networkmanager.enable = true;
   networking.dhcpcd.enable = false;
 
   networking.hostName = "lenovo-nixos";
@@ -77,7 +58,7 @@ in {
   };
 
   console = {
-    font = "ter-118n"; # Terminus 16
+    font = "ter-118n"; # Terminus 18
     packages = with pkgs.kbdKeymaps; [ dvp neo pkgs.terminus_font ];
     keyMap = "uk";
   };
@@ -108,10 +89,6 @@ in {
     gparted htop
   ];
 
-  #virtualisation.virtualbox.host.enable = true;
-  #virtualisation.lxc.enable = true;
-  #virtualisation.lxd.enable = true;
-
   virtualisation.libvirtd.enable = true;
 
   security.wrappers.spice-client-glib-usb-acl-helper.source = "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
@@ -119,23 +96,15 @@ in {
   programs.tmux.enable = true;
   programs.tmux.keyMode = "vi";
 
-  #programs.vim.defaultEditor = true;
   environment.variables = { EDITOR = "vim"; };
 
   programs.zsh.enable = true;
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
   # List services that you want to enable:
 
   # General Purpose Mouse
   # enables mouse in the virtual terminal
   services.gpm.enable = true;
-
-  services.flatpak.enable = true;
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
@@ -146,30 +115,6 @@ in {
   networking.firewall.allowedUDPPorts = [ ];
   # Or disable the firewall altogether.
   #networking.firewall.enable = false;
-
-  /*
-  Starting Nmap 7.80 ( https://nmap.org ) at 2020-03-12 07:41 CET
-  mass_dns: warning: Unable to determine any DNS servers. Reverse DNS is disabled. Try using --system-dns or specify valid servers with --dns-servers
-  Nmap scan report for localhost (127.0.0.1)
-  Host is up (0.000016s latency).
-  Other addresses for localhost (not scanned): ::1
-  Not shown: 65528 closed ports
-  PORT     STATE SERVICE
-  22/tcp   open  ssh
-  80/tcp   open  http
-  443/tcp  open  https
-  631/tcp  open  ipp
-  8118/tcp open  privoxy
-  9050/tcp open  tor-socks
-  9063/tcp open  unknown
-  
-  Nmap done: 1 IP address (1 host up) scanned in 1.84 seconds
-  */
-  networking.nat = {
-    enable = true;
-    externalInterface = "wlp2s0";
-    internalInterfaces = [ "veth0" ];
-  };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -184,63 +129,27 @@ in {
     package = pkgs.pulseaudioFull;
 
     support32Bit = true;
-
-    /*
-    tcp = {
-      enable = true;
-      anonymousClients.allowAll = true;
-    };
-    */
   };
 
   # Enable bluetooth.
-  hardware.bluetooth = {
-    enable = true;
-  };
+  hardware.bluetooth.enable = true;
 
-  hardware.opengl = {
-    driSupport32Bit = true;
-  };
+  hardware.opengl.driSupport32Bit = true;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.layout = "gb,no";
   services.xserver.xkbOptions = "eurosign:e,caps:escape";
 
-  #services.logind.lidSwitch = "ignore"; # Appears to do nothing for whatever reason.
-
-  /*
-  services.xserver.enableTCP = true;
-  services.xserver.displayManager.sddm.extraConfig = ''
-    [X11]
-    ServerArguments=-listen tcp
-  '';
-  */
-
   # Enable touchpad support.
   services.xserver.libinput = {
     enable = true;
 
     clickMethod = "clickfinger";
-
-    #package = nixos-19-09.libinput;
-    package = nixos-unstable.libinput;
-    #package = pkgs.callPackage ./libinput { graphviz = pkgs.graphviz-nox; };
-    #package = pkgs.libinput.overrideAttrs (old: {
-    #  patches = old.patches ++ [ ./85707.patch ]; /*
-    #    (pkgs.fetchpatch {
-    #      name = "dont-override-udev.patch";
-    #      url = "https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/384.patch";
-    #      sha256 = "184z9awskbs19qmlngqzvp5hp43g6lkxrzzqqpppb16j1y4gs45r";
-    #    })
-    #  ]; */
-    #});
-    #xf86inputlibinput.package = nixos-19-09.xorg.xf86inputlibinput;
   };
 
   # Enable the KDE Desktop Environment.
   services.xserver.displayManager.sddm.enable = true;
-  #services.xserver.displayManager.startx.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
 
   services.lorri.enable = true;
@@ -251,8 +160,7 @@ in {
 
     users.jakob = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "nixadm" "dialout" "lxd" ];
-
+      extraGroups = [ "wheel" "dialout" "lxd" ];
       initialPassword = "password";
     };
   };
@@ -265,9 +173,6 @@ in {
   services.tor = {
     enable = true;
     client.enable = true;
-
-    #hiddenServices."main".map = [ { port = 22; } { port = 80; } ];
-
     controlSocket.enable = true;
   };
 
@@ -280,14 +185,6 @@ in {
   nixpkgs.config = {
     firefox.enablePlasmaBrowserIntegration = true;
   };
-
-  nixpkgs.overlays = [
-    (self: super: {
-      nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-        inherit pkgs;
-      };
-    })
-  ];
 
   nix.useSandbox = true;
 }
