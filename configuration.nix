@@ -79,7 +79,7 @@ in {
 
     sshfs
 
-    archivemount dex diffoscope ffmpeg-full file
+    archivemount dex ffmpeg-full file
     jq nmap patchelf xxd usbutils
 
     wireguard
