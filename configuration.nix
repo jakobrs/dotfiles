@@ -6,7 +6,6 @@
 
 let
   nixos-unstable = import <nixos-unstable> {};
-  nixos-unstable-small = import <nixos-unstable-small> {};
 
 in {
   imports =
@@ -37,7 +36,7 @@ in {
   networking.networkmanager.enable = true;
   networking.dhcpcd.enable = false;
 
-  networking.hostName = "igglybuff";
+  networking.hostName = "vulpix";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -54,7 +53,7 @@ in {
   i18n.defaultLocale = "en_GB.UTF-8";
 
   console = {
-    font = "ter-116n";
+    font = "ter-118n";
     packages = with pkgs.kbdKeymaps; [ dvp neo pkgs.terminus_font ];
     keyMap = "uk";
   };
@@ -167,7 +166,7 @@ in {
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "20.09"; # Did you read the comment?
+  system.stateVersion = "20.03"; # Did you read the comment?
 
   nixpkgs.config = {
     firefox.enablePlasmaBrowserIntegration = true;
