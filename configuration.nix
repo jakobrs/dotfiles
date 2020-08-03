@@ -19,7 +19,6 @@ in {
   boot.cleanTmpDir = true;
 
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
-  boot.kernelPackages = nixos-unstable.linuxPackages_latest;
   boot.kernel = {
     sysctl = {
       "kernel.sysrq" = 1;
@@ -36,7 +35,7 @@ in {
   networking.networkmanager.enable = true;
   networking.dhcpcd.enable = false;
 
-  networking.hostName = "vulpix";
+  networking.hostName = "girafarig";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
