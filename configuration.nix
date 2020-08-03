@@ -27,8 +27,6 @@ in {
     };
   };
 
-  #boot.blacklistedKernelModules = [ "evdev" ];
-
   boot.loader = {
     systemd-boot.enable = true;
     efi = {
@@ -39,7 +37,7 @@ in {
   networking.networkmanager.enable = true;
   networking.dhcpcd.enable = false;
 
-  networking.hostName = "lenovo-nixos";
+  networking.hostName = "igglybuff";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -53,40 +51,32 @@ in {
   time.timeZone = "Europe/Oslo";
 
   # Select internationalisation properties.
-  i18n = {
-    defaultLocale = "en_GB.UTF-8";
-  };
+  i18n.defaultLocale = "en_GB.UTF-8";
 
   console = {
-    font = "ter-118n"; # Terminus 18
+    font = "ter-116n";
     packages = with pkgs.kbdKeymaps; [ dvp neo pkgs.terminus_font ];
     keyMap = "uk";
   };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    wget vimHugeX tmux firefox git
-    pavucontrol
-    wireshark
-    reptyr
-    libimobiledevice
-    kate
-    direnv
-    gnupg
+    # Miscellaneous
+    wget git gnupg file jq nmap patchelf
+    xxd dex htop vimHugeX bat reptyr unzip
 
-    acpi efibootmgr
+    # System administration
+    acpi efibootmgr pciutils usbutils lshw parted gparted glxinfo
 
-    sshfs
+    # General untitled category #2
+    brightnessctl pavucontrol libimobiledevice usbmuxd
+    sshfs archivemount
 
-    archivemount dex ffmpeg-full file
-    jq nmap patchelf xxd usbutils
+    # Larger programs
+    wireshark firefox wireguard ffmpeg-full
 
-    wireguard
-
+    # Virtual machines
     virt-manager spice-gtk
-
-    gparted htop
   ];
 
   virtualisation.libvirtd.enable = true;
@@ -148,17 +138,14 @@ in {
     clickMethod = "clickfinger";
   };
 
-  # Enable the KDE Desktop Environment.
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
-
-  services.lorri.enable = true;
 
   users = {
     defaultUserShell = pkgs.zsh;
     groups = { nixadm = { }; };
 
-    users.jakob = {
+    users.user = {
       isNormalUser = true;
       extraGroups = [ "wheel" "dialout" "lxd" ];
       initialPassword = "password";
@@ -180,7 +167,7 @@ in {
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "19.09"; # Did you read the comment?
+  system.stateVersion = "20.09"; # Did you read the comment?
 
   nixpkgs.config = {
     firefox.enablePlasmaBrowserIntegration = true;
