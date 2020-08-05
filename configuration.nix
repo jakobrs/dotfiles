@@ -19,6 +19,8 @@ in {
   boot.cleanTmpDir = true;
 
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+  boot.kernelModules = [ "kvmgt" ];
+  boot.kernelParams = [ "intel_iommu=on" "i915.enable_gvt=1" ];
   boot.kernel = {
     sysctl = {
       "kernel.sysrq" = 1;
@@ -127,7 +129,7 @@ in {
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.layout = "gb,no";
-  services.xserver.xkbOptions = "eurosign:e,caps:escape";
+  services.xserver.xkbOptions = "eurosign:e,caps:escape_shifted_capslock";
 
   # Enable touchpad support.
   services.xserver.libinput = {
@@ -152,13 +154,6 @@ in {
 
   nix = {
     trustedUsers = [ "root" "@wheel" ];
-  };
-
-  # Tor
-  services.tor = {
-    enable = true;
-    client.enable = true;
-    controlSocket.enable = true;
   };
 
   # This value determines the NixOS release with which your system is to be
