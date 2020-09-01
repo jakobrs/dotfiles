@@ -5,20 +5,22 @@
 { config, lib, pkgs, ... }:
 
 let
-  nixos-unstable = import <nixos-unstable> {};
+  nixos-stable = import <nixos> {};
+  nixos-unstable = import <nixos-unstable> { config.allowUnfree = true; };
 
 in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./identifying.nix
 
-      ./cachix.nix
+      ./identifying.nix
     ];
 
   boot.cleanTmpDir = true;
 
+  boot.kernelPackages = nixos-unstable.linuxPackages_latest;
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+  boot.initrd.kernelModules = [ "vfio-pci" ];
   boot.kernelModules = [ "kvmgt" ];
   boot.kernelParams = [ "intel_iommu=on" "i915.enable_gvt=1" ];
   boot.kernel = {
@@ -36,17 +38,8 @@ in {
 
   networking.networkmanager.enable = true;
   networking.dhcpcd.enable = false;
-
-  networking.hostName = "girafarig";
-
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
   networking.useDHCP = false;
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  networking.hostName = "girafarig";
 
   time.timeZone = "Europe/Oslo";
 
@@ -86,15 +79,13 @@ in {
   programs.tmux.enable = true;
   programs.tmux.keyMode = "vi";
 
-  environment.variables = { EDITOR = "vim"; };
+  environment.variables = {
+    EDITOR = "vim";
+  };
 
   programs.zsh.enable = true;
 
   # List services that you want to enable:
-
-  # General Purpose Mouse
-  # enables mouse in the virtual terminal
-  services.gpm.enable = true;
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
@@ -121,6 +112,8 @@ in {
     support32Bit = true;
   };
 
+  hardware.steam-hardware.enable = true;
+
   # Enable bluetooth.
   hardware.bluetooth.enable = true;
 
@@ -130,6 +123,21 @@ in {
   services.xserver.enable = true;
   services.xserver.layout = "gb,no";
   services.xserver.xkbOptions = "eurosign:e,caps:escape_shifted_capslock";
+
+  services.xserver.exportConfiguration = true;
+
+  services.xserver.videoDrivers = [ "modesetting" ];
+
+  /* NVIDIA Optimus PRIME sync configuration
+  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.dpi = 96;
+  hardware.nvidia.optimus_prime = {
+    enable = true;
+
+    intelBusId = "PCI:0:2:0";
+    nvidiaBusId = "PCI:1:0:0";
+  };
+  */
 
   # Enable touchpad support.
   services.xserver.libinput = {
@@ -163,7 +171,13 @@ in {
   system.stateVersion = "20.03"; # Did you read the comment?
 
   nixpkgs.config = {
+    allowUnfree = true;
+
     firefox.enablePlasmaBrowserIntegration = true;
+
+    packageOverrides = pkgs: rec {
+      sof-firmware = nixos-unstable.sof-firmware;
+    };
   };
 
   nix.useSandbox = true;
