@@ -18,15 +18,13 @@ in {
 
   boot.cleanTmpDir = true;
 
+  boot.initrd.kernelModules = [ /* "vfio-pci" */ ];
   boot.kernelPackages = nixos-unstable.linuxPackages_latest;
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
-  boot.initrd.kernelModules = [ "vfio-pci" ];
-  boot.kernelModules = [ "kvmgt" ];
-  boot.kernelParams = [ "intel_iommu=on" "i915.enable_gvt=1" ];
-  boot.kernel = {
-    sysctl = {
-      "kernel.sysrq" = 1;
-    };
+  boot.kernelModules = [ /* "kvmgt" */ ];
+  boot.kernelParams = [ /* "intel_iommu=on" "i915.enable_gvt=1" */ ];
+  boot.kernel.sysctl = {
+    "kernel.sysrq" = 1;
   };
 
   boot.loader = {
@@ -118,6 +116,7 @@ in {
   hardware.bluetooth.enable = true;
 
   hardware.opengl.driSupport32Bit = true;
+  hardware.opengl.package = nixos-unstable.mesa.drivers;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
