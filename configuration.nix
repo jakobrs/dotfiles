@@ -5,7 +5,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  nixos-stable = import <nixos> {};
   nixos-unstable = import <nixos-unstable> { config.allowUnfree = true; };
 
 in {
@@ -24,7 +23,6 @@ in {
   boot.kernelModules = [ "kvmgt" ];
   boot.kernelParams = [
     "intel_iommu=on" "i915.enable_gvt=1"
-    "snd_hda_intel.dmic_detect=0"
   ];
   boot.kernel = {
     sysctl = {
@@ -112,7 +110,21 @@ in {
 
     extraModules = [ pkgs.pulseaudio-modules-bt ];
 
-    package = pkgs.pulseaudioFull;
+    package = pkgs.pulseaudioFull.override {
+      alsaLib = pkgs.alsaLib.override {
+        alsa-ucm-conf = pkgs.alsa-ucm-conf.overrideAttrs (old: rec {
+          name = "alsa-ucm-conf-${version}";
+          version = "4626beb75442e7de81ccb71a8bf34c85976b9dc1";
+
+          src = pkgs.fetchFromGitHub {
+            owner = "alsa-project";
+            repo = "alsa-ucm-conf";
+            rev = "4626beb75442e7de81ccb71a8bf34c85976b9dc1";
+            hash = "sha256:11gpfnilrbhpzh26r23jxvp7fsk361pxk5l7cbl3xk4pimpnnsbb";
+          };
+        });
+      };
+    };
 
     support32Bit = true;
   };
