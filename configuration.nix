@@ -22,7 +22,10 @@ in {
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
   boot.initrd.kernelModules = [ "vfio-pci" ];
   boot.kernelModules = [ "kvmgt" ];
-  boot.kernelParams = [ "intel_iommu=on" "i915.enable_gvt=1" ];
+  boot.kernelParams = [
+    "intel_iommu=on" "i915.enable_gvt=1"
+    "snd_hda_intel.dmic_detect=0"
+  ];
   boot.kernel = {
     sysctl = {
       "kernel.sysrq" = 1;
