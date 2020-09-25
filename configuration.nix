@@ -39,6 +39,8 @@ in {
     };
   };
 
+  services.fwupd.enable = true;
+
   networking.networkmanager.enable = true;
   networking.dhcpcd.enable = false;
   networking.useDHCP = false;
@@ -128,8 +130,6 @@ in {
   services.xserver.xkbOptions = "eurosign:e,caps:escape_shifted_capslock";
 
   services.xserver.exportConfiguration = true;
-
-  documentation.nixos.enable = false;
 
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.prime = {
