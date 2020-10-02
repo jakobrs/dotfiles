@@ -123,6 +123,9 @@ in {
   hardware.bluetooth.enable = true;
 
   hardware.opengl.driSupport32Bit = true;
+  hardware.opengl.extraPackages = with pkgs; [
+    intel-media-driver
+  ];
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -166,7 +169,7 @@ in {
 
     users.user = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "dialout" "lxd" ];
+      extraGroups = [ "wheel" "dialout" ];
       initialPassword = "password";
     };
   };
