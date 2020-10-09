@@ -4,11 +4,7 @@
 
 { config, lib, pkgs, ... }:
 
-let
-  nixos-stable = import <nixos> {};
-  nixos-unstable = import <nixos-unstable> { config.allowUnfree = true; };
-
-in {
+{
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -18,7 +14,7 @@ in {
 
   boot.cleanTmpDir = true;
 
-  boot.kernelPackages = nixos-unstable.linuxPackages_latest;
+  boot.kernelPackages = pgks.linuxPackages_latest;
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
   boot.initrd.kernelModules = [ "vfio-pci" ];
   boot.kernelModules = [ "kvmgt" ];
