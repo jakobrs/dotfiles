@@ -184,10 +184,6 @@
     allowUnfree = true;
 
     firefox.enablePlasmaBrowserIntegration = true;
-
-    packageOverrides = pkgs: rec {
-      sof-firmware = nixos-unstable.sof-firmware;
-    };
   };
 
   nix.useSandbox = true;
