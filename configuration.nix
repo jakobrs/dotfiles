@@ -14,7 +14,7 @@
 
   boot.cleanTmpDir = true;
 
-  boot.kernelPackages = pgks.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
   boot.initrd.kernelModules = [ "vfio-pci" ];
   boot.kernelModules = [ "kvmgt" ];
