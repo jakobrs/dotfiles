@@ -20,7 +20,6 @@
   boot.kernelModules = [ "kvmgt" ];
   boot.kernelParams = [
     "intel_iommu=on" "i915.enable_gvt=1"
-    "snd_hda_intel.dmic_detect=0"
   ];
   boot.kernel = {
     sysctl = {
