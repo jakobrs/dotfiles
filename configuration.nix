@@ -21,6 +21,10 @@
   boot.loader.systemd-boot.consoleMode = "max";
   boot.loader.efi.canTouchEfiVariables = true;
 
+  environment.variables = {
+    PLASMA_USE_QT_SCALING = "1";
+  };
+
   networking.hostName = "psyduck"; # Define your hostname.
   networking.networkmanager.enable = true;
   networking.dhcpcd.enable = false;
@@ -36,7 +40,7 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_GB.UTF-8";
   console = {
-    font = "ter-132n";
+    font = "ter-128n";
     packages = with pkgs.kbdKeymaps; [ neo dvp pkgs.terminus_font ];
     keyMap = "uk";
   };
@@ -104,6 +108,7 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+  services.openssh.forwardX11 = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
