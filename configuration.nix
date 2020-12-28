@@ -12,6 +12,7 @@
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.initrd.kernelModules = [ "vfio-pci" ];
+  boot.kernelParams = [ "pci=noats" ];
 
   virtualisation.libvirtd.enable = true;
   virtualisation.spiceUSBRedirection.enable = true;
@@ -25,7 +26,7 @@
     PLASMA_USE_QT_SCALING = "1";
   };
 
-  networking.hostName = "psyduck"; # Define your hostname.
+  networking.hostName = "growlithe"; # Define your hostname.
   networking.networkmanager.enable = true;
   networking.dhcpcd.enable = false;
   networking.useDHCP = false;
@@ -50,7 +51,7 @@
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
   
-  services.xserver.videoDrivers = [ "modesetting" ];
+  services.xserver.videoDrivers = [ "modesetting" "fbdev" ];
 
   # Configure keymap in X11
   services.xserver.layout = "gb,no";
