@@ -16,7 +16,7 @@
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
-  boot.initrd.kernelModules = [ "vfio-pci" ];
+  boot.initrd.kernelModules = [ "vfio-pci" "i915" ];
   boot.kernelModules = [ "kvmgt" ];
   boot.kernelParams = [
     "intel_iommu=on" "i915.enable_gvt=1"
@@ -152,7 +152,7 @@
   services.xserver.libinput = {
     enable = true;
 
-    clickMethod = "clickfinger";
+    touchpad.clickMethod = "clickfinger";
   };
 
   services.xserver.displayManager.sddm.enable = true;
