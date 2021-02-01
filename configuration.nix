@@ -73,6 +73,7 @@
   ];
 
   virtualisation.libvirtd.enable = true;
+  programs.dconf.enable = true;
 
   security.wrappers.spice-client-glib-usb-acl-helper.source = "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
 
