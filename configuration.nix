@@ -16,6 +16,7 @@
 
   virtualisation.libvirtd.enable = true;
   virtualisation.spiceUSBRedirection.enable = true;
+  programs.dconf.enable = true;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -48,10 +49,11 @@
 
   # Enable the Plasma 5 Desktop Environment.
   services.xserver.enable = true;
+  services.xserver.exportConfiguration = true;
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
   
-  services.xserver.videoDrivers = [ "modesetting" "fbdev" ];
+  services.xserver.videoDrivers = [ "modesetting" ];
 
   # Configure keymap in X11
   services.xserver.layout = "gb,no";
