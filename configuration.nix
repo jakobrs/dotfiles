@@ -102,15 +102,22 @@
   services.printing.enable = true;
 
   # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio = {
+  #sound.enable = true;
+  #hardware.pulseaudio = {
+  #  enable = true;
+
+  #  extraModules = [ pkgs.pulseaudio-modules-bt ];
+
+  #  package = pkgs.pulseaudioFull;
+
+  #  support32Bit = true;
+  #};
+  services.pipewire = {
     enable = true;
-
-    extraModules = [ pkgs.pulseaudio-modules-bt ];
-
-    package = pkgs.pulseaudioFull;
-
-    support32Bit = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    jack.enable = true;
   };
 
   hardware.steam-hardware.enable = true;
@@ -130,13 +137,14 @@
 
   services.xserver.exportConfiguration = true;
 
-  services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.nvidia.prime = {
-    offload.enable = true;
+  services.xserver.videoDrivers = [ "modesetting" ];
+  #services.xserver.videoDrivers = [ "nvidia" ];
+  #hardware.nvidia.prime = {
+  #  offload.enable = true;
 
-    intelBusId = "PCI:0:2:0";
-    nvidiaBusId = "PCI:1:0:0";
-  };
+  #  intelBusId = "PCI:0:2:0";
+  #  nvidiaBusId = "PCI:1:0:0";
+  #};
 
   /* NVIDIA Optimus PRIME sync configuration
   services.xserver.videoDrivers = [ "nvidia" ];
@@ -157,7 +165,11 @@
   };
 
   services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  #services.xserver.desktopManager.plasma5.enable = true;
+  programs.sway.enable = true;
+
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
 
   users = {
     defaultUserShell = pkgs.zsh;
