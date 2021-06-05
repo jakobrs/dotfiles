@@ -20,6 +20,7 @@
   boot.kernelModules = [ "kvmgt" ];
   boot.kernelParams = [
     "intel_iommu=on" "i915.enable_gvt=1"
+    "snd-intel-dspcfg.dsp_driver=1"
   ];
   boot.kernel = {
     sysctl = {
@@ -48,7 +49,7 @@
 
   console = {
     font = "ter-118n";
-    packages = with pkgs.kbdKeymaps; [ dvp neo pkgs.terminus_font ];
+    packages = [ pkgs.terminus_font ];
     keyMap = "uk";
   };
 
@@ -125,8 +126,8 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.layout = "gb,no";
-  services.xserver.xkbOptions = "eurosign:e,caps:escape_shifted_capslock";
+  services.xserver.layout = "gb,no,trans";
+  services.xserver.xkbOptions = "eurosign:e,caps:escape,lv5:rwin_switch_lock";
 
   services.xserver.exportConfiguration = true;
 
