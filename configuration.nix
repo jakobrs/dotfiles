@@ -83,6 +83,7 @@
 
   environment.variables = {
     EDITOR = "vim";
+    MOZ_ENABLE_WAYLAND = "1";
   };
 
   programs.zsh.enable = true;
