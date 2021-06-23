@@ -158,6 +158,8 @@
     touchpad.clickMethod = "clickfinger";
   };
 
+  fonts.fonts = with pkgs; [ noto-fonts noto-fonts-cjk ];
+
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
 
