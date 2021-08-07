@@ -43,7 +43,7 @@
   i18n.defaultLocale = "en_GB.UTF-8";
   console = {
     font = "ter-128n";
-    packages = with pkgs.kbdKeymaps; [ neo dvp pkgs.terminus_font ];
+    packages = with pkgs; [ terminus_font ];
     keyMap = "uk";
   };
 
@@ -65,17 +65,24 @@
   hardware.bluetooth.enable = true;
 
   # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio = {
+  #sound.enable = true;
+  #hardware.pulseaudio = {
+  #  enable = true;
+
+  #  extraModules = [ pkgs.pulseaudio-modules-bt ];
+
+  #  package = pkgs.pulseaudioFull;
+
+  #  support32Bit = true;
+  #};
+
+  services.pipewire = {
     enable = true;
-
-    extraModules = [ pkgs.pulseaudio-modules-bt ];
-
-    package = pkgs.pulseaudioFull;
-
-    support32Bit = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    jack.enable = true;
   };
-
 
   hardware.opengl = {
     enable = true;
@@ -97,6 +104,8 @@
   environment.systemPackages = with pkgs; [
     wget vimHugeX
     firefox
+
+    sway alacritty dmenu xwayland mpv usbutils wlr-randr mplayer wf-recorder
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
